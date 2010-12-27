@@ -2,15 +2,18 @@
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
 
 /**
+ * Image Resizes.
+ * Host the imagick processsing logic. This is the class you should extends
+ * to add custom resizements & processing
  *
- * Enter description here ...
- * @author dstendardi
+ * @author David Stendardi <david.stendardi@adenclassifieds.com>
  */
 class Resizer
 {
     /**
      * Crop center & resize the image
      *
+     * @param \Imagick image
      * @param integer width
      * @param integer Height
      */
@@ -22,8 +25,9 @@ class Resizer
     /**
      * Simples resize broken ratio
      *
+     * @param \Imagick image
      * @param integer width
-     * @parma integer height
+     * @@param integer height
      */
     public function adaptiveResizeImage($image, $width, $height)
     {
@@ -33,6 +37,7 @@ class Resizer
     /**
      * Homothetic resizement
      *
+     * @param \Imagick image
      * @param integer $maxwidth
      * @param integer $maxheight
      */

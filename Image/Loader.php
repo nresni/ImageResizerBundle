@@ -2,28 +2,42 @@
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
 
 use Doctrine\Common\Cache\AbstractCache;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
+ * Image Loader.
+ * Handles the resource loading.
  *
- * Enter description here ...
- * @author dstendardi
+ * If the resource is located on the filesystem, load it directly.
+ *
+ * If the resource is an url (distant file) cache it using the configured cache service
+ * for subsequent calls
+ *
+ * @author David Stendardi <david.stendardi@adenclassifieds.com>
  */
 class Loader
 {
     /**
+     * An imagick fresh instance
+     *
      * @var Imagick
      */
     protected $imagick;
 
     /**
-     * @var Cache
+     * The cache service used to limit number of http fetchs
+     *
+     * @var AbstractCache
      */
     protected $cache;
 
     /**
+     * Where to find the resources (path to the filer mount)
+     *
      * @var string
      */
     protected $basePath;
+
 
     /**
      * @param Imagick image
@@ -44,7 +58,7 @@ class Loader
      * Load a resource (external or local)
      *
      * @param string image url or path
-     * @return Resizer instance
+     * @return Imagick instance
      */
     public function load($resource)
     {
@@ -56,10 +70,12 @@ class Loader
             $this->image->readImage($fullPath);
         }
 
-        return $this;
+        return $this->image;
     }
 
     /**
+     * Loads image blob from url, using curl
+     *
      * @throws Exception
      */
     protected function loadExternalImage($resource)
@@ -77,12 +93,11 @@ class Loader
         curl_close($curl);
 
         if ( ! $content) {
-            throw new Exception();
+            throw new NotFoundHttpException();
         }
 
         $this->cache->save($resource, $content);
 
         return $content;
     }
-
 }

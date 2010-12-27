@@ -8,9 +8,9 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * AssetOptimizerExtension.
+ * ImageResizerExtension.
  *
- * @author Fabien Potencier <fabien.potencier@symfony-project.com>
+ * @author David Stendardi <david.stendardi@adenclassifieds.com>
  */
 class ImageResizerExtension extends Extension
 {

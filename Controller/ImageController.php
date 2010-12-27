@@ -3,14 +3,19 @@ namespace Bundle\Adenclassifieds\ImageResizerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/**
+ * ImageController.
+ *
+ * @author David Stendardi <david.stendardi@adenclassifieds.com>
+ */
 class ImageController extends Controller
 {
     /**
-     * <img src="http://images.explorimmo.com/img/s/0/photo/CAIM/explo5054635.jpg" class="defaultImg imgS" alt="Appartement&nbsp;2 pièces&nbsp;2&nbsp;500&nbsp;€&nbsp;FAI&nbsp;Paris 6ème">
+     * Process image resizement, using underlaying services
      *
      * @param integer size
      * @param string function
-     * @param string resource path
+     * @return Symfony\Components\HttpKernel\Response
      */
     public function resizeAction($size, $function)
     {

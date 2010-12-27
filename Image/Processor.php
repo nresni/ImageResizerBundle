@@ -2,31 +2,44 @@
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
 
 /**
- * Enter description here ...
- * @author dstendardi
+ * Image Processor.
+ * Wrap other services to load and process image resizements
+ *
+ * @author David Stendardi <david.stendardi@adenclassifieds.com>
  */
 class Processor
 {
-
     /**
+     * The loader instance
+     *
      * @var Loader
      */
     protected $loader;
 
     /**
+     * The resizer instance
+     *
      * @var Resizer
      */
     protected $resizer;
 
     /**
+     * A list of acceptables sizes
+     *
+     * <code>
+     * array('medium' => array(120,120))
+     * </code>
+     *
      * @var array sizes
      */
     protected $sizes = array();
 
     /**
+     * Loads underlaying dependencies and acceptable sizes
      *
      * @param Loader loader
      * @param Resizer resizer
+     * @parma array sizes
      */
     public function __construct(Loader $loader, Resizer $resizer, array $sizes = array())
     {
@@ -51,6 +64,10 @@ class Processor
     }
 
     /**
+     * Process the resizements, after validation of function & size
+     * Given function must be declared in the injected Resizer class
+     * Size must be present in this class member
+     *
      * @param string function
      * @param string size
      * @return Imagick Image
