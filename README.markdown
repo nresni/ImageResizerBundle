@@ -21,11 +21,20 @@ Provides "on the fly" image resizement using Imagick, CURL & Memcached (by defau
     
 ### Setup file compression in your config.yml
 
-    imageresizer.config:
-   
-   
+    imageresizer.config: ~
+
 ## Usage
 
-in your template :
+just use the configured route in your image src attribute :
+
+the following call will fetch the image from google website, store it in the configured cache manager, resize it using the format "small" defined in your configuration
    
-    <img src="/image/resize/32/homotheticResize?resource=http://www.google.fr/intl/fr_ALL/images/logos/images_logo_lg.gif">
+    <img src="/image/resize/small/homothetic?resource=http://www.google.fr/intl/fr_ALL/images/logos/images_logo_lg.gif">
+
+the following call will fetch image from your local filesystem
+
+    <img src="/image/resize/small/homothetic?resource=foo/bar.gif" />
+    
+you can also use the helper
+
+    <img src="<?php echo $view['imageresizer']->resize('foo/bar', 'homothetic', 'small') ?>" />

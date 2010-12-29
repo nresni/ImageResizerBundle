@@ -27,12 +27,12 @@ class ImageResizerBundle extends BaseHelper
     /**
      * Generates the resizement target url
      *
+     * @param string src
      * @param string function
      * @param string size
-     * @param string src
      * @return string the resizement url
      */
-    public function resizeUrl($function, $size, $src)
+    public function resize($src, $function, $size)
     {
       return $this->router->generate('image_resizer_image_resize', array('function' => $function, 'size' => $size, 'resource' => $src));
     }
