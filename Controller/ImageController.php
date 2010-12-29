@@ -21,7 +21,7 @@ class ImageController extends Controller
     {
         $resource = $this->get('request')->query->get('resource');
 
-        $image = $this->get('imageresizer.processor')->load($resource)->process($function, $size);
+        $image = $this->get('imageresizer')->load($resource)->process($function, $size);
 
         $response = $this->createResponse($image);
 

@@ -2,82 +2,100 @@
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
 
 /**
- * Image Resizes.
- * Host the imagick processsing logic. This is the class you should extends
- * to add custom resizements & processing
+ * Wrap other services to load and process image resizements
  *
  * @author David Stendardi <david.stendardi@adenclassifieds.com>
  */
 class Resizer
 {
     /**
-     * Crop center & resize the image
+     * The loader instance
      *
-     * @param \Imagick image
-     * @param integer width
-     * @param integer Height
+     * @var Loader
      */
-    public function cropCenter($image, $width, $height)
+    protected $loader;
+
+    /**
+     * The resizer instance
+     *
+     * @var Resizer
+     */
+    protected $processor;
+
+    /**
+     * A list of acceptables sizes
+     *
+     * <code>
+     * array('medium' => array(120,120))
+     * </code>
+     *
+     * @var array sizes
+     */
+    protected $sizes = array();
+
+    /**
+     * The functions allowed
+     *
+     * @var array functions
+     */
+    protected $functions;
+
+    /**
+     * Loads underlaying dependencies and acceptable sizes
+     *
+     * @param Loader loader
+     * @param Resizer resizer
+     * @parma array sizes
+     */
+    public function __construct(Loader $loader, Processor $processor, array $sizes = array(), array $functions = array())
     {
-        $image->cropThumbnailImage($width, $height);
+        $this->loader = $loader;
+
+        $this->processor = $processor;
+
+        $this->sizes = $sizes;
+
+        $this->functions = $functions;
     }
 
     /**
-     * Simples resize broken ratio
+     * Load a resource (external or local)
      *
-     * @param \Imagick image
-     * @param integer width
-     * @@param integer height
+     * @param string image url or path
+     * @return Resizer instance
      */
-    public function adaptiveResizeImage($image, $width, $height)
+    public function load($resource)
     {
-        $image->adaptiveResizeImage($width, $height);
+        $this->loader->load($resource);
+
+        return $this;
     }
 
     /**
-     * Homothetic resizement
+     * Process the resizements, after validation of function & size
+     * Given function must be declared in the injected Resizer class
+     * Size must be present in this class member
      *
-     * @param \Imagick image
-     * @param integer $maxwidth
-     * @param integer $maxheight
+     * @param string function
+     * @param string size
+     * @return Imagick Image
      */
-    public function homotheticResize($image, $width, $height) {
-
-        list($width,$height) = $this->scaleImage($image->getImageWidth(), $image->getImageHeight(), $width, $height);
-
-        $image->thumbnailImage($width, $height);
-    }
-
-    /**
-     * @param Original X size in pixels
-     * @param Original Y size in pixels
-     * @param New X maximum size in pixels
-     * @param New Y maximum size in pixels
-     */
-    protected function scaleImage($width, $height, $maximumWidth, $maximumHeight)
+    public function process($function, $size)
     {
-        list($nx, $ny) = array($width, $height);
-
-        if ($width >= $maximumWidth || $height >= $maximumHeight) {
-
-            if ($width > 0) {
-                $rx = $maximumWidth / $width;
-            }
-            if ($height > 0) {
-                $ry = $maximumHeight / $height;
-            }
-
-            if ($rx > $ry) {
-                $r = $ry;
-            } else {
-                $r = $rx;
-            }
-
-            $nx = intval($width * $r);
-
-            $ny = intval($height * $r);
+        if (false === isset($this->sizes[$size])) {
+           throw new \InvalidArgumentException();
         }
 
-        return array($nx, $ny);
+        list($width, $height) = $this->sizes[$size];
+
+        if (false === in_array($function, $this->functions) || false === is_callable(array($this->processor, $function))) {
+            throw new \InvalidArgumentException();
+        }
+
+        $image = $this->loader->image;
+
+        $this->processor->$function($image, $width, $height);
+
+        return $image;
     }
 }

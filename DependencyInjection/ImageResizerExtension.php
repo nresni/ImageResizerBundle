@@ -26,6 +26,18 @@ class ImageResizerExtension extends Extension
             $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
             $loader->load('imageresizer.xml');
         }
+
+        if (isset($config['sizes'])) {
+            $container->setParameter('imageresizer.sizes', $config['sizes']);
+        }
+
+        if (isset($config['functions'])) {
+            $container->setParameter('imageresizer.functions', $config['functions']);
+        }
+
+        if (isset($config['base_directory'])) {
+            $container->setParameter('imageresizer.loader.base_directory', $config['base_directory']);
+        }
     }
 
     /**

@@ -21,7 +21,16 @@ Provides "on the fly" image resizement using Imagick, CURL & Memcached (by defau
     
 ### Setup file compression in your config.yml
 
-    imageresizer.config: ~
+    imageresizer.config:
+        # available functions (activated by default)
+        functions : [cropCenter, adaptive, homothetic]
+        
+        # named sizes
+        sizes:
+            small: [32, 32] # width, height (default)
+            
+        # where to find the images (default to /tmp)
+        base_directory: /path/to/images
 
 ## Usage
 

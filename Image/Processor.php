@@ -2,94 +2,88 @@
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
 
 /**
- * Image Processor.
- * Wrap other services to load and process image resizements
+ * Image Resizes.
+ * Host the imagick processsing logic. This is the class you should extends
+ * to add custom resizements & processing
  *
  * @author David Stendardi <david.stendardi@adenclassifieds.com>
  */
 class Processor
 {
     /**
-     * The loader instance
+     * Crop center & resize the image
      *
-     * @var Loader
+     * @param \Imagick image
+     * @param integer width
+     * @param integer Height
      */
-    protected $loader;
-
-    /**
-     * The resizer instance
-     *
-     * @var Resizer
-     */
-    protected $resizer;
-
-    /**
-     * A list of acceptables sizes
-     *
-     * <code>
-     * array('medium' => array(120,120))
-     * </code>
-     *
-     * @var array sizes
-     */
-    protected $sizes = array();
-
-    /**
-     * Loads underlaying dependencies and acceptable sizes
-     *
-     * @param Loader loader
-     * @param Resizer resizer
-     * @parma array sizes
-     */
-    public function __construct(Loader $loader, Resizer $resizer, array $sizes = array())
+    public function cropCenter($image, $width, $height)
     {
-        $this->loader = $loader;
-
-        $this->resizer = $resizer;
-
-        $this->sizes = $sizes;
-    }
-
-    /**
-     * Load a resource (external or local)
-     *
-     * @param string image url or path
-     * @return Resizer instance
-     */
-    public function load($resource)
-    {
-        $this->loader->load($resource);
-
-        return $this;
-    }
-
-    /**
-     * Process the resizements, after validation of function & size
-     * Given function must be declared in the injected Resizer class
-     * Size must be present in this class member
-     *
-     * @param string function
-     * @param string size
-     * @return Imagick Image
-     */
-    public function process($function, $size)
-    {
-        if (false === isset($this->sizes[$size])) {
-           throw new \InvalidArgumentException();
-        }
-
-        list($width, $height) = $this->sizes[$size];
-
-        if (false === is_callable(array($this->resizer, $function))) {
-            throw new \InvalidArgumentException();
-        }
-
-        $image = $this->loader->image;
-
-        $this->resizer->$function($image, $width, $height);
+        $image->cropThumbnailImage($width, $height);
 
         $image->unsharpMaskImage(0 , 0.5 , 1 , 0.05);
+    }
 
-        return $image;
+    /**
+     * Simples resize broken ratio
+     *
+     * @param \Imagick image
+     * @param integer width
+     * @@param integer height
+     */
+    public function adaptive($image, $width, $height)
+    {
+        $image->adaptiveResizeImage($width, $height);
+
+        $image->unsharpMaskImage(0 , 0.5 , 1 , 0.05);
+    }
+
+    /**
+     * Homothetic resizement
+     *
+     * @param \Imagick image
+     * @param integer $maxwidth
+     * @param integer $maxheight
+     */
+    public function homothetic($image, $width, $height) {
+
+        list($width,$height) = $this->scaleImage($image->getImageWidth(), $image->getImageHeight(), $width, $height);
+
+        $image->thumbnailImage($width, $height);
+
+        $image->unsharpMaskImage(0 , 0.5 , 1 , 0.05);
+    }
+
+    /**
+     * @param Original X size in pixels
+     * @param Original Y size in pixels
+     * @param New X maximum size in pixels
+     * @param New Y maximum size in pixels
+     */
+    protected function scaleImage($width, $height, $maximumWidth, $maximumHeight)
+    {
+        list($nx, $ny) = array($width, $height);
+
+        if ($width >= $maximumWidth || $height >= $maximumHeight) {
+
+            if ($width > 0) {
+                $rx = $maximumWidth / $width;
+            }
+            if ($height > 0) {
+                $ry = $maximumHeight / $height;
+            }
+
+            if ($rx > $ry) {
+                $r = $ry;
+            } else {
+                $r = $rx;
+            }
+
+            $nx = intval($width * $r);
+
+            $ny = intval($height * $r);
+        }
+
+        return array($nx, $ny);
     }
 }
