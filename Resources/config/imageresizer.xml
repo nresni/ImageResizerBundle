@@ -5,7 +5,10 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        
+        <parameter key="imageresizer.mongo.connection.dsn">mongodb://localhost</parameter>
+        <parameter key="imageresizer.mongo.connection.port">mongodb://localhost</parameter>
+        <parameter key="imageresizer.mongo.connection.database">imageresizer</parameter>
+        <parameter key="imageresizer.mongo.connection.collection">files</parameter>
         <parameter key="imageresizer.cache.mongo.class">Bundle\Adenclassifieds\ImageResizerBundle\Cache\MongoCache</parameter>
         <parameter key="imageresizer.cache.memcache.class">Doctrine\Common\Cache\MemcacheCache</parameter>
         <parameter key="imageresizer.loader.class">Bundle\Adenclassifieds\ImageResizerBundle\Image\Loader</parameter>
@@ -26,30 +29,29 @@
     </parameters>
 
     <services>
+        <service id="imageresizer.mongo.connection" class="Mongo">
+            <call method="connect">
+                <argument>%imageresizer.mongo.connection.dsn%</argument>
+                <argument>%imageresizer.mongo.connection.port%</argument>
+            </call>
+        </service>
         <service id="imageresizer.cache.mongo" class="%imageresizer.cache.mongo.class%">
             <call method="setMongo">
-              <argument type="service">
-                  <service class="Mongo">
-                      <call method="connect">
-                          <argument>mongodb://localhost</argument>
-                          <argument>11211</argument>
-                      </call>
-                  </service>
-              </argument>
-              <argument>imageresizer</argument>
-              <argument>files</argument>
+              <argument type="service" id="imageresizer.mongo.connection" />
+              <argument>%imageresizer.mongo.connection.database%</argument>
+              <argument>%imageresizer.mongo.connection.collection%</argument>
             </call>
         </service>
         <service id="imageresizer.cache.memcache" class="%imageresizer.cache.memcache.class%">
             <call method="setMemcache">
-	            <argument type="service">
-	                <service class="Memcache">
-	                    <call method="connect">
-	                        <argument>localhost</argument>
-	                        <argument>11211</argument>
-	                    </call>
-	                </service>
-	            </argument>
+              <argument type="service">
+                  <service class="Memcache">
+                      <call method="connect">
+                          <argument>localhost</argument>
+                          <argument>11211</argument>
+                      </call>
+                  </service>
+              </argument>
             </call>
         </service>
         <service id="imageresizer.loader" class="%imageresizer.loader.class%">

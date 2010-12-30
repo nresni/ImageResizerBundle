@@ -12,8 +12,6 @@ class MongoCache extends AbstractCache
     public function setMongo(\Mongo $mongo, $database, $collection)
     {
         $this->collection = $mongo->selectCollection($database, $collection);
-
-        $this->collection->ensureIndex(array('key'));
     }
 
     /**
