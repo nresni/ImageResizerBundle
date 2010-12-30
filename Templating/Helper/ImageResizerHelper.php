@@ -2,6 +2,7 @@
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper;
 
 use Symfony\Component\Templating\Helper\Helper as BaseHelper;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper;
 
 /**
  * @author dstendardi

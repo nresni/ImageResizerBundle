@@ -1,7 +1,7 @@
 <?php
 namespace Bundle\Adenclassifieds\ImageResizerBundle\Tests\Templating\Helper;
 
-use Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper;
+use Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper;
 
 /**
  *
@@ -16,12 +16,29 @@ class ImageResizerHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function testImage()
     {
-        $this->helper = $this->getMockBuilder('Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper')->disableOriginalConstructor()->setMethods(array('url', 'getSize', 'getName'))->getMock();
+        $helper = $this->getMockBuilder('Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper')->disableOriginalConstructor()->setMethods(array('url', 'getSize', 'getName'))->getMock();
 
-        $this->helper->expects($this->once())->method('url')->with('foo/bar.png', 'foo', 'bar')->will($this->returnValue('/foo/bar.png'));
+        $helper->expects($this->once())->method('url')->with('foo/bar.png', 'foo', 'bar')->will($this->returnValue('/foo/bar.png'));
 
-        $this->helper->expects($this->once())->method('getSize')->with('bar')->will($this->returnValue(array('32', '64')));
+        $helper->expects($this->once())->method('getSize')->with('bar')->will($this->returnValue(array('32', '64')));
 
-        $this->assertEquals('<img src="/foo/bar.png" class="test" height="64" width="32"/>', $this->helper->image('foo/bar.png', 'foo', 'bar', array('class' => 'test')));
+        $this->assertEquals('<img src="/foo/bar.png" class="test" height="64" width="32"/>', $helper->image('foo/bar.png', 'foo', 'bar', array('class' => 'test')));
+    }
+
+    /**
+     * @test
+     * @cover Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizer::url
+     */
+    public function testUrl()
+    {
+        $router = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\Helper\RouterHelper')->disableOriginalConstructor()->setMethods(array('generate'))->getMock();
+
+        $helper = new ImageResizerHelper($router, array(), array());
+
+        list($function, $size, $src) = array('foo', 'small', 'foo/bar.png');
+
+        $router->expects($this->once())->method('generate')->with('image_resizer_image_resize', array('function' => $function, 'size' => $size, 'resource' => $src))->will($this->returnValue('/foo/bar.png'));
+
+        $this->assertEquals('/foo/bar.png', $helper->url($src, $function, $size));
     }
 }

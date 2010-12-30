@@ -50,6 +50,6 @@ you can also use the helper
     
 or, if you are attentive to client side performance, use the image method that provides width and height attributes
 
-   <?php $view['imageresizer']->image('foo/bar.gif', 'homothetic', 'small', array('class' => 'test')) ?> // output <img src="/image/resize/small/homothetic?resource=foo/bar.gif" class="test" height="64" width="32"/>
+    <?php $view['imageresizer']->image('foo/bar.gif', 'homothetic', 'small', array('class' => 'test')) ?> // output <img src="/image/resize/small/homothetic?resource=foo/bar.gif" class="test" height="64" width="32"/>
 
     
