@@ -38,9 +38,7 @@ class ImageResizerExtension extends Extension
             $container->setParameter('imageresizer.loader.base_directory', $config['base_directory']);
         }
 
-        if (isset($config['cache']['class'])) {
-            $this->loadCache($container, $config['cache']['class']);
-        }
+        $this->loadCache($container, isset($config['cache']['class']) ? $config['cache']['class'] : 'memcache');
 
     }
 
@@ -54,17 +52,34 @@ class ImageResizerExtension extends Extension
         switch ($cache['class']) {
             case 'memcache':
                 $loader->load("cache.memcache.xml");
-                $container->setParameter('imageresizer.memcache.dsn', $config['dsn']);
-                $container->setParameter('imageresizer.memcache.port', $config['port']);
-                $this->loadMemcache($container);
+
+                if (isset($config['dsn'])) {
+                    $container->setParameter('imageresizer.memcache.dsn', $config['dsn']);
+                }
+
+                if (isset($config['port'])) {
+                  $container->setParameter('imageresizer.memcache.port', $config['port']);
+                }
             break;
 
             case 'mongo':
                 $loader->load("cache.mongo.xml");
-                $container->setParameter('imageresizer.mongo.dsn', $config['dsn']);
-                $container->setParameter('imageresizer.mongo.port', $config['port']);
-                $container->setParameter('imageresizer.mongo.dsn', $config['database']);
-                $container->setParameter('imageresizer.mongo.port', $config['collection']);
+
+                if (isset($config['dsn'])) {
+                    $container->setParameter('imageresizer.mongo.dsn', $config['dsn']);
+                }
+
+                if (isset($config['port'])) {
+                  $container->setParameter('imageresizer.mongo.port', $config['port']);
+                }
+
+                if (isset($config['database'])) {
+                    $container->setParameter('imageresizer.mongo.database', $config['database']);
+                }
+
+                if (isset($config['collection'])) {
+                  $container->setParameter('imageresizer.mongo.collection', $config['collection']);
+                }
             break;
 
             default:
