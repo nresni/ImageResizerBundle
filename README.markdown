@@ -2,11 +2,11 @@ Provides "on the fly" image resizement using Imagick, CURL & Memcached (by defau
 
 ## Installation
 
-### Add AssetOptimizerBundle to your src/Bundle dir
+### checkout the bundle to your src/Bundle dir
 
     git submodule add git://github.com/Adenclassifieds/ImageResizerBundle.git src/Bundle/Adenclassifieds/ImageResizerBundle
-    
-### Add AssetOptimizerBundle to your application Kernel
+
+### Initalize the bundle into your application Kernel
 
 
     // app/AppKernel.php
@@ -46,4 +46,10 @@ the following call will fetch image from your local filesystem
     
 you can also use the helper
 
-    <img src="<?php echo $view['imageresizer']->resize('foo/bar', 'homothetic', 'small') ?>" />
+    <img src="<?php echo $view['imageresizer']->url('foo/bar.gif', 'homothetic', 'small') ?>" />
+    
+or, if you are attentive to client side performance, use the image method that provides width and height attributes
+
+   <?php $view['imageresizer']->image('foo/bar.gif', 'homothetic', 'small', array('class' => 'test')) ?> // output <img src="/image/resize/small/homothetic?resource=foo/bar.gif" class="test" height="64" width="32"/>
+
+    
