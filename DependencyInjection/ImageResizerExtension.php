@@ -23,8 +23,7 @@ class ImageResizerExtension extends Extension
     public function configLoad($config, ContainerBuilder $container)
     {
         if (!$container->hasDefinition('imageresizer')) {
-            $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
-            $loader->load('imageresizer.xml');
+            $this->loadDefaults($container);
         }
 
         if (isset($config['sizes'])) {
@@ -38,7 +37,51 @@ class ImageResizerExtension extends Extension
         if (isset($config['base_directory'])) {
             $container->setParameter('imageresizer.loader.base_directory', $config['base_directory']);
         }
+
+        if (isset($config['cache']['class'])) {
+            $this->loadCache($container, $config['cache']['class']);
+        }
+
     }
+
+    /**
+     * Load cache
+     */
+    protected function loadCache(ContainerBuilder $container, $cache)
+    {
+        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+
+        switch ($cache['class']) {
+            case 'memcache':
+                $loader->load("cache.memcache.xml");
+                $container->setParameter('imageresizer.memcache.dsn', $config['dsn']);
+                $container->setParameter('imageresizer.memcache.port', $config['port']);
+                $this->loadMemcache($container);
+            break;
+
+            case 'mongo':
+                $loader->load("cache.mongo.xml");
+                $container->setParameter('imageresizer.mongo.dsn', $config['dsn']);
+                $container->setParameter('imageresizer.mongo.port', $config['port']);
+                $container->setParameter('imageresizer.mongo.dsn', $config['database']);
+                $container->setParameter('imageresizer.mongo.port', $config['collection']);
+            break;
+
+            default:
+                throw new InvalidArgumentException("unsupported file cache : ".$cache);
+        }
+    }
+
+    /**
+     * Load defaults
+     */
+    protected function loadDefaults(ContainerBuilder $container)
+    {
+        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+
+        $loader->load('imageresizer.xml');
+    }
+
 
     /**
      * Returns the base path for the XSD files.

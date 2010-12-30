@@ -1,0 +1,23 @@
+<parameters>
+    <parameter key="imageresizer.mongo.connection.dsn">mongodb://localhost</parameter>
+    <parameter key="imageresizer.mongo.connection.port">mongodb://localhost</parameter>
+    <parameter key="imageresizer.mongo.connection.database">imageresizer</parameter>
+    <parameter key="imageresizer.mongo.connection.collection">files</parameter>
+    <parameter key="imageresizer.cache.mongo.class">Bundle\Adenclassifieds\ImageResizerBundle\Cache\MongoCache</parameter>
+</parameters>
+
+<services>
+    <service id="imageresizer.mongo.connection" class="Mongo">
+        <call method="connect">
+            <argument>%imageresizer.mongo.connection.dsn%</argument>
+            <argument>%imageresizer.mongo.connection.port%</argument>
+        </call>
+    </service>
+    <service id="imageresizer.loader.cache" class="%imageresizer.cache.mongo.class%">
+        <call method="setMongo">
+          <argument type="service" id="imageresizer.mongo.connection" />
+          <argument>%imageresizer.mongo.connection.database%</argument>
+          <argument>%imageresizer.mongo.connection.collection%</argument>
+        </call>
+    </service>
+</services>

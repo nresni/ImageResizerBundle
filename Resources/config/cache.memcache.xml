@@ -1,0 +1,19 @@
+<parameters>
+    <parameter key="imageresizer.memcache.connection.dsn">localhost</parameter>
+    <parameter key="imageresizer.memcache.connection.port">11211</parameter>
+    <parameter key="imageresizer.cache.memcache.class">Doctrine\Common\Cache\MemcacheCache</parameter>
+</parameters>
+
+<services>
+    <service id="imageresizer.memcache.connection" class="Memcache">
+        <call method="connect">
+            <argument>%imageresizer.memcache.connection.dsn%</argument>
+            <argument>%imageresizer.memcache.connection.port%</argument>
+        </call>
+    </service>
+    <service id="imageresizer.loader.cache" class="%imageresizer.cache.memcache.class%">
+        <call method="setMemcache">
+          <argument type="service" id="imageresizer.memcache.connection" />
+        </call>
+    </service>
+</services>

@@ -22,6 +22,15 @@ Provides "on the fly" image resizement using Imagick, CURL & Memcached (by defau
 ### Setup file compression in your config.yml
 
     imageresizer.config:
+        # the cache adapter
+        cache: 
+          class: memcache # accepted are : memcache, mongo
+          dsn: localhost
+          port: 11211
+          # for mongo only
+          database: imageresizer
+          collection: files
+
         # available functions (activated by default)
         functions : [cropCenter, adaptive, homothetic]
         
@@ -31,6 +40,12 @@ Provides "on the fly" image resizement using Imagick, CURL & Memcached (by defau
             
         # where to find the images (default to /tmp)
         base_directory: /path/to/images
+
+### For Mongodb based cache only :
+
+please run the following command to create the database and collection with correct indexes
+
+    ./console imageresizer:initialize:mongo
 
 ## Usage
 
