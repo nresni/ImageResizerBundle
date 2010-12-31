@@ -1,5 +1,5 @@
 image_resizer_image_resize:
-    pattern: /image/resize/:size/:function
-    defaults: { _controller: Adenclassifieds\ImageResizerBundle:Image:resize}
+    pattern: /image/resize/{size}/{function}
+    defaults: { _controller: ImageResizerBundle:Image:resize}
     options:
       segment_separators: [/]

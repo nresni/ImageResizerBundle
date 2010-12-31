@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Cache;
+namespace Adenclassifieds\ImageResizerBundle\Cache;
 
 use Doctrine\Common\Cache\AbstractCache;
 

@@ -1,7 +1,7 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Tests\Templating\Helper;
+namespace Adenclassifieds\ImageResizerBundle\Tests\Templating\Helper;
 
-use Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper;
+use Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper;
 
 /**
  *
@@ -12,11 +12,11 @@ class ImageResizerHelperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
-     * @cover Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizer::image
+     * @cover Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizer::image
      */
     public function testImage()
     {
-        $helper = $this->getMockBuilder('Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper')->disableOriginalConstructor()->setMethods(array('url', 'getSize', 'getName'))->getMock();
+        $helper = $this->getMockBuilder('Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper')->disableOriginalConstructor()->setMethods(array('url', 'getSize', 'getName'))->getMock();
 
         $helper->expects($this->once())->method('url')->with('foo/bar.png', 'foo', 'bar')->will($this->returnValue('/foo/bar.png'));
 
@@ -27,7 +27,7 @@ class ImageResizerHelperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizer::url
+     * @cover Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizer::url
      */
     public function testUrl()
     {

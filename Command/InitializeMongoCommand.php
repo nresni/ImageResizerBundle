@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Command;
+namespace Adenclassifieds\ImageResizerBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;

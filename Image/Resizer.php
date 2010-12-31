@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
+namespace Adenclassifieds\ImageResizerBundle\Image;
 
 /**
  * Wrap other services to load and process image resizements

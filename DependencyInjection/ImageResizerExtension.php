@@ -1,11 +1,12 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\DependencyInjection;
+namespace Adenclassifieds\ImageResizerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Reference;
 
-use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
 
 /**
  * ImageResizerExtension.
@@ -20,8 +21,10 @@ class ImageResizerExtension extends Extension
      * @param array            $config    An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
-    public function configLoad($config, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
+        $config = array_shift($configs);
+
         if (!$container->hasDefinition('imageresizer')) {
             $this->loadDefaults($container);
         }
@@ -38,7 +41,7 @@ class ImageResizerExtension extends Extension
             $container->setParameter('imageresizer.loader.base_directory', $config['base_directory']);
         }
 
-        $this->loadCache($container, isset($config['cache']['class']) ? $config['cache']['class'] : 'memcache');
+        $this->loadCache($container, $config['cache']);
 
     }
 
@@ -47,11 +50,11 @@ class ImageResizerExtension extends Extension
      */
     protected function loadCache(ContainerBuilder $container, $cache)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         switch ($cache['class']) {
             case 'memcache':
-                $loader->load("cache.memcache.xml");
+                $loader->load('cache.memcache.xml');
 
                 if (isset($config['dsn'])) {
                     $container->setParameter('imageresizer.memcache.dsn', $config['dsn']);
@@ -63,7 +66,7 @@ class ImageResizerExtension extends Extension
             break;
 
             case 'mongo':
-                $loader->load("cache.mongo.xml");
+                $loader->load('cache.mongo.xml');
 
                 if (isset($config['dsn'])) {
                     $container->setParameter('imageresizer.mongo.dsn', $config['dsn']);
@@ -83,7 +86,7 @@ class ImageResizerExtension extends Extension
             break;
 
             default:
-                throw new InvalidArgumentException("unsupported file cache : ".$cache);
+                throw new \InvalidArgumentException('unsupported file cache : '.$cache);
         }
     }
 
@@ -92,7 +95,7 @@ class ImageResizerExtension extends Extension
      */
     protected function loadDefaults(ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $loader->load('imageresizer.xml');
     }
@@ -105,7 +108,7 @@ class ImageResizerExtension extends Extension
      */
     public function getXsdValidationBasePath()
     {
-        return null;
+        return __DIR__ . '/../Resources/config/';
     }
 
     /**
@@ -114,7 +117,7 @@ class ImageResizerExtension extends Extension
      */
     public function getNamespace()
     {
-        return null;
+        return 'http://symfony.com/schema/dic/adenclassifieds_image_resizer';
     }
 
     /**
@@ -123,6 +126,6 @@ class ImageResizerExtension extends Extension
      */
     public function getAlias()
     {
-        return 'imageresizer';
+        return 'image_resizer';
     }
 }

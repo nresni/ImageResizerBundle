@@ -1,9 +1,9 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
+namespace Adenclassifieds\ImageResizerBundle\Image;
 
 /**
  * Image Resizes.
- * Host the imagick processsing logic. This is the class you should extends
+ * Host the imagick processing logic. This is the class you should extend
  * to add custom resizements & processing
  *
  * @author David Stendardi <david.stendardi@adenclassifieds.com>
@@ -17,7 +17,7 @@ class Processor
      * @param integer width
      * @param integer Height
      */
-    public function cropCenter($image, $width, $height)
+    public function cropCenter(\Imagick $image, $width, $height)
     {
         $image->cropThumbnailImage($width, $height);
 
@@ -31,7 +31,7 @@ class Processor
      * @param integer width
      * @@param integer height
      */
-    public function adaptive($image, $width, $height)
+    public function adaptive(\Imagick $image, $width, $height)
     {
         $image->adaptiveResizeImage($width, $height);
 
@@ -45,9 +45,9 @@ class Processor
      * @param integer $maxwidth
      * @param integer $maxheight
      */
-    public function homothetic($image, $width, $height) {
-
-        list($width,$height) = $this->scaleImage($image->getImageWidth(), $image->getImageHeight(), $width, $height);
+    public function homothetic(\Imagick $image, $width, $height)
+    {
+        list($width, $height) = $this->scaleImage($image->getImageWidth(), $image->getImageHeight(), $width, $height);
 
         $image->thumbnailImage($width, $height);
 

@@ -1,14 +1,14 @@
 <?xml version="1.0" ?>
 
-<container xmlns="http://www.symfony-project.org/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="imageresizer.loader.class">Bundle\Adenclassifieds\ImageResizerBundle\Image\Loader</parameter>
+        <parameter key="templating.helper.imageresizer.class">Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper</parameter>
+        <parameter key="imageresizer.loader.class">Adenclassifieds\ImageResizerBundle\Image\Loader</parameter>
         <parameter key="imageresizer.loader.base_directory">/tmp</parameter>
-        <parameter key="imageresizer.processor.class">Bundle\Adenclassifieds\ImageResizerBundle\Image\Processor</parameter>
-        <parameter key="imageresizer.class">Bundle\Adenclassifieds\ImageResizerBundle\Image\Resizer</parameter>
+        <parameter key="imageresizer.processor.class">Adenclassifieds\ImageResizerBundle\Image\Processor</parameter>
+        <parameter key="imageresizer.class">Adenclassifieds\ImageResizerBundle\Image\Resizer</parameter>
         <parameter key="imageresizer.functions" type="collection">
             <parameter>cropCenter</parameter>
             <parameter>homothetic</parameter>
@@ -23,9 +23,15 @@
     </parameters>
 
     <services>
+        <service id="templating.helper.imageresizer" class="%templating.helper.imageresizer.class%">
+            <tag name="templating.helper" alias="imageresizer" />
+            <argument type="service" id="templating.helper.router" />
+            <argument>%imageresizer.sizes%</argument>
+            <argument>%imageresizer.functions%</argument>
+        </service>
         <service id="imageresizer.loader" class="%imageresizer.loader.class%">
             <argument type="service">
-                <service class="Imagick" shared="false" />
+                <service class="Imagick" />
             </argument>
             <argument type="service" id="imageresizer.loader.cache" />
             <argument>%imageresizer.loader.base_directory%</argument>
