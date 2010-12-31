@@ -38,7 +38,7 @@ class ImageResizerExtension extends Extension
             $container->setParameter('imageresizer.loader.base_directory', $config['base_directory']);
         }
 
-        $this->loadCache($container, isset($config['cache']['class']) ? $config['cache']['class'] : 'memcache');
+        $this->loadCache($container,  $config['cache']);
 
     }
 
@@ -83,7 +83,7 @@ class ImageResizerExtension extends Extension
             break;
 
             default:
-                throw new InvalidArgumentException("unsupported file cache : ".$cache);
+                throw new \InvalidArgumentException("unsupported file cache : ".$cache);
         }
     }
 
