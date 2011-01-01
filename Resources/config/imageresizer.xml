@@ -4,6 +4,7 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
+        <parameter key="templating.helper.imageresizer.class">Bundle\Adenclassifieds\ImageResizerBundle\Templating\Helper\ImageResizerHelper</parameter>
         <parameter key="imageresizer.loader.class">Bundle\Adenclassifieds\ImageResizerBundle\Image\Loader</parameter>
         <parameter key="imageresizer.loader.base_directory">/tmp</parameter>
         <parameter key="imageresizer.processor.class">Bundle\Adenclassifieds\ImageResizerBundle\Image\Processor</parameter>
@@ -22,6 +23,12 @@
     </parameters>
 
     <services>
+        <service id="templating.helper.imageresizer" class="%templating.helper.imageresizer.class%">
+            <tag name="templating.helper" alias="imageresizer" />
+            <argument type="service" id="templating.helper.router" />
+            <argument>%imageresizer.sizes%</argument>
+            <argument>%imageresizer.functions%</argument>
+        </service>
         <service id="imageresizer.loader" class="%imageresizer.loader.class%">
             <argument type="service">
                 <service class="Imagick" shared="false" />
