@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Controller;
+namespace Adenclassifieds\ImageResizerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

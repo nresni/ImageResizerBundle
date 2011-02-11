@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\Image;
+namespace Adenclassifieds\ImageResizerBundle\Image;
 
 use Doctrine\Common\Cache\AbstractCache;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

@@ -8,7 +8,7 @@
         <parameter key="imageresizer.mongo.connection.port">mongodb://localhost</parameter>
         <parameter key="imageresizer.mongo.connection.database">imageresizer</parameter>
         <parameter key="imageresizer.mongo.connection.collection">files</parameter>
-        <parameter key="imageresizer.cache.mongo.class">Bundle\Adenclassifieds\ImageResizerBundle\Cache\MongoCache</parameter>
+        <parameter key="imageresizer.cache.mongo.class">Adenclassifieds\ImageResizerBundle\Cache\MongoCache</parameter>
     </parameters>
 
     <services>

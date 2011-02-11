@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\Adenclassifieds\ImageResizerBundle\DependencyInjection;
+namespace Adenclassifieds\ImageResizerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Reference;
 
@@ -20,8 +20,10 @@ class ImageResizerExtension extends Extension
      * @param array            $config    An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
-    public function configLoad($config, ContainerBuilder $container)
+    public function configLoad($configs, ContainerBuilder $container)
     {
+        $config = array_shift($configs);
+
         if (!$container->hasDefinition('imageresizer')) {
             $this->loadDefaults($container);
         }
@@ -38,7 +40,7 @@ class ImageResizerExtension extends Extension
             $container->setParameter('imageresizer.loader.base_directory', $config['base_directory']);
         }
 
-        $this->loadCache($container,  $config['cache']);
+        $this->loadCache($container, $config['cache']);
 
     }
 
@@ -51,7 +53,7 @@ class ImageResizerExtension extends Extension
 
         switch ($cache['class']) {
             case 'memcache':
-                $loader->load("cache.memcache.xml");
+                $loader->load('cache.memcache.xml');
 
                 if (isset($config['dsn'])) {
                     $container->setParameter('imageresizer.memcache.dsn', $config['dsn']);
@@ -63,7 +65,7 @@ class ImageResizerExtension extends Extension
             break;
 
             case 'mongo':
-                $loader->load("cache.mongo.xml");
+                $loader->load('cache.mongo.xml');
 
                 if (isset($config['dsn'])) {
                     $container->setParameter('imageresizer.mongo.dsn', $config['dsn']);
@@ -83,7 +85,7 @@ class ImageResizerExtension extends Extension
             break;
 
             default:
-                throw new \InvalidArgumentException("unsupported file cache : ".$cache);
+                throw new \InvalidArgumentException('unsupported file cache : '.$cache);
         }
     }
 
