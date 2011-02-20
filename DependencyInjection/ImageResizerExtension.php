@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
 
 /**
  * ImageResizerExtension.
@@ -20,7 +21,7 @@ class ImageResizerExtension extends Extension
      * @param array            $config    An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
-    public function configLoad($configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
         $config = array_shift($configs);
 
@@ -49,7 +50,7 @@ class ImageResizerExtension extends Extension
      */
     protected function loadCache(ContainerBuilder $container, $cache)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         switch ($cache['class']) {
             case 'memcache':
@@ -94,7 +95,7 @@ class ImageResizerExtension extends Extension
      */
     protected function loadDefaults(ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $loader->load('imageresizer.xml');
     }
@@ -125,6 +126,6 @@ class ImageResizerExtension extends Extension
      */
     public function getAlias()
     {
-        return 'imageresizer';
+        return 'image_resizer';
     }
 }
