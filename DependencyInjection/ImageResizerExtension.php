@@ -108,7 +108,7 @@ class ImageResizerExtension extends Extension
      */
     public function getXsdValidationBasePath()
     {
-        return null;
+        return __DIR__ . '/../Resources/config/';
     }
 
     /**
@@ -117,7 +117,7 @@ class ImageResizerExtension extends Extension
      */
     public function getNamespace()
     {
-        return null;
+        return 'http://symfony.com/schema/dic/adenclassifieds_image_resizer';
     }
 
     /**
