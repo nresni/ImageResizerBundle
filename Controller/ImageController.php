@@ -2,6 +2,7 @@
 namespace Adenclassifieds\ImageResizerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * ImageController.
@@ -23,7 +24,7 @@ class ImageController extends Controller
 
         $image = $this->get('imageresizer')->load($resource)->process($function, $size);
 
-        $response = $this->createResponse($image);
+        $response = new Response($image);
 
         $response->headers->set('Content-Type', $image->getImageType());
 
