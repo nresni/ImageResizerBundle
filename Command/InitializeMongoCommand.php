@@ -8,14 +8,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Bundle\FrameworkBundle\Util\Filesystem;
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 /**
  * AssetsClearCacheCommand.
  *
  * @author David Stendardi <david.stendardi@gmail.com>
  */
-class InitializeMongoCommand extends Command
+class InitializeMongoCommand extends ContainerAwareCommand
 {
     /**
      * @see Command
