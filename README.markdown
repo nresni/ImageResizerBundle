@@ -4,7 +4,7 @@ Provides "on the fly" image resizement using Imagick, CURL & Memcached (by defau
 
 ### checkout the bundle to your src/Bundle dir
 
-    git submodule add git://github.com/Adenclassifieds/ImageResizerBundle.git src/Bundle/Adenclassifieds/ImageResizerBundle
+    git submodule add git://github.com/nresni/ImageResizerBundle.git src/Bundle/Adenclassifieds/ImageResizerBundle
 
 ### Initalize the bundle into your application Kernel
 
